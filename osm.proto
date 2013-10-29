@@ -1,0 +1,124 @@
+message BlobHeader {
+    required string type = 1;
+    optional bytes indexData = 2;
+    required int32 dataSize = 3;
+}
+
+message Blob {
+    optional bytes rawData = 1;
+    optional int32 rawSize = 2;
+    optional bytes zlibData = 3;
+}
+
+message HeaderBlock {
+    optional BoundingBox boundingBox = 1;
+    repeated string requiredFeatures = 4;
+    repeated string optionalFeatures = 5;
+
+    optional string writingProgram = 16;
+    optional string source = 17;
+
+    optional int64 osmosisReplicationTimestamp = 32;
+    optional int64 osmosisReplicationSequenceNumber = 33;
+    optional string osmosisReplicationBaseUrl = 34;
+}
+
+message BoundingBox {
+    required sint64 left = 1;
+    required sint64 right = 2;
+    required sint64 top = 3;
+    required sint64 bottom = 4;
+}
+
+message PrimitiveBlock {
+    required StringTable stringTable = 1;
+    repeated PrimitiveGroup primitiveGroups = 2;
+
+    optional int32 granularity = 17 [default=100];
+    optional int64 latitudeOffset = 19 [default=0];
+    optional int64 longitudeOffset = 20 [default=0];
+
+    optional int32 dateGranularity = 18 [default=1000];
+}
+
+message PrimitiveGroup {
+    repeated Node nodes = 1;
+    optional DenseNodes denseNodes = 2;
+    repeated Way ways = 3;
+    repeated Relation relations = 4;
+}
+
+message StringTable {
+    repeated bytes values = 1;
+}
+
+message Info {
+    optional int32 version = 1 [default = -1];
+    optional int64 timestamp = 2;
+    optional int64 changeset = 3;
+    optional int32 userId = 4;
+    optional uint32 userName = 5;
+    optional bool visible = 6;
+}
+
+message DenseInfo {
+    repeated int32 version = 1 [packed = true];
+    repeated sint64 timestamp = 2 [packed = true];
+    repeated sint64 changeset = 3 [packed = true];
+    repeated sint32 userId = 4 [packed = true];
+    repeated sint32 userName = 5 [packed = true];
+    repeated bool visible = 6 [packed = true];
+}
+
+message Node {
+    required sint64 id = 1;
+
+    repeated uint32 keys = 2 [packed = true];
+    repeated uint32 values = 3 [packed = true];
+
+    optional Info info = 4;
+
+    required sint64 latitude = 8;
+    required sint64 longitude = 9;
+}
+
+message DenseNodes {
+    repeated sint64 ids = 1 [packed = true];
+
+    optional DenseInfo denseInfo = 5;
+
+    repeated sint64 latitudes = 8 [packed = true];
+    repeated sint64 longitudes = 9 [packed = true];
+
+    repeated int32 keyValues = 10 [packed = true];
+}
+
+message Way {
+    required int64 id = 1;
+
+    repeated uint32 keys = 2 [packed = true];
+    repeated uint32 values = 3 [packed = true];
+
+    optional Info info = 4;
+
+    repeated sint64 nodeReferences = 8 [packed = true];
+}
+
+message Relation {
+    enum MemberType {
+        NODE = 0;
+        WAY = 1;
+        RELATION = 2;
+    }
+
+    required int64 id = 1;
+
+    repeated uint32 keys = 2 [packed = true];
+    repeated uint32 values = 3 [packed = true];
+
+    optional Info info = 4;
+
+    repeated int32 roles = 8 [packed = true];
+    repeated sint64 members = 9 [packed = true];
+    repeated MemberType types = 10 [packed = true];
+}
