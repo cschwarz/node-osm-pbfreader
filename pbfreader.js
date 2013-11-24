@@ -9,7 +9,7 @@ var _ = require('underscore');
 var osm = require('node-osm');
 
 var Schema = require('protobuf').Schema;
-var schema = new Schema(fs.readFileSync('osm.desc'));
+var schema = new Schema(fs.readFileSync(__dirname + '/osm.desc'));
 
 function PbfReader() {
     events.EventEmitter.call(this);
