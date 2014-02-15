@@ -11,6 +11,6 @@
   "dependencies": {
     "underscore": "~1.5.2",
     "node-osm": "https://github.com/cschwarz/node-osm/tarball/master",
-    "protobuf": "~0.8.7"
+    "node-protobuf": "~1.0.10"
   }
 }

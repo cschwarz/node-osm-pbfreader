@@ -8,7 +8,7 @@ var _ = require('underscore');
 
 var osm = require('node-osm');
 
-var Schema = require('protobuf').Schema;
+var Schema = require('node-protobuf').Protobuf;
 var schema = new Schema(fs.readFileSync(__dirname + '/osm.desc'));
 
 function PbfReader() {
@@ -74,12 +74,13 @@ PbfReader.prototype._readFileBlock = function (fd, callback) {
         var headerLength = buffer.readInt32BE(0);
         self.position += 4;
 
-        var blobHeader = schema.BlobHeader.parse(buffer.slice(4, 4 + headerLength));
+        var blobHeader = schema.Parse(buffer.slice(4, 4 + headerLength), 'BlobHeader');
+
         self.position += headerLength;
 
         buffer = new Buffer(blobHeader.dataSize);
         fs.read(fd, buffer, 0, buffer.length, self.position, function (err, bytesRead, buffer) {
-            var blob = schema.Blob.parse(buffer);
+            var blob = schema.Parse(buffer, 'Blob');
 
             if (blob.rawData) {
                 self.position += blobHeader.dataSize;
@@ -116,14 +117,15 @@ PbfReader.prototype._handleFileBlock = function (blobHeader, blobData, callback)
 PbfReader.prototype._readOsmHeader = function (blobData, callback) {
     var self = this;
 
-    self.emit('header', schema.HeaderBlock.parse(blobData));
+    self.emit('header', schema.Parse(blobData, 'HeaderBlock'));
+
     callback();
 };
 
 PbfReader.prototype._readOsmData = function (blobData, callback) {
     var self = this;
 
-    var primitiveBlock = schema.PrimitiveBlock.parse(blobData);
+    var primitiveBlock = schema.Parse(blobData, 'PrimitiveBlock');
 
     for (var i = 0; i < primitiveBlock.stringTable.values.length; i++)
         primitiveBlock.stringTable.values[i] = primitiveBlock.stringTable.values[i].toString();
