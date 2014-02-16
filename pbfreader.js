@@ -135,13 +135,13 @@ PbfReader.prototype._readOsmData = function (blobData, callback) {
     for (i = 0; i < primitiveBlock.primitiveGroups.length; i++) {
         var primitiveGroup = primitiveBlock.primitiveGroups[i];
 
-        if (!_.isUndefined(primitiveGroup.nodes))
+        if (!_.isUndefined(primitiveGroup.nodes) && primitiveGroup.nodes.length > 0)
             data.nodes.push.apply(data.nodes, self._readNodes(primitiveGroup.nodes, primitiveBlock));
-        if (!_.isUndefined(primitiveGroup.denseNodes))
+        if (!_.isUndefined(primitiveGroup.denseNodes) && primitiveGroup.denseNodes.ids.length > 0)
             data.nodes.push.apply(data.nodes, self._readDenseNodes(primitiveGroup.denseNodes, primitiveBlock));
-        if (!_.isUndefined(primitiveGroup.ways))
+        if (!_.isUndefined(primitiveGroup.ways) && primitiveGroup.ways.length > 0)
             data.ways.push.apply(data.ways, self._readWays(primitiveGroup.ways, primitiveBlock));
-        if (!_.isUndefined(primitiveGroup.relations))
+        if (!_.isUndefined(primitiveGroup.relations) && primitiveGroup.relations.length > 0)
             data.relations.push.apply(data.relations, self._readRelations(primitiveGroup.relations, primitiveBlock));
     }
 
@@ -150,7 +150,30 @@ PbfReader.prototype._readOsmData = function (blobData, callback) {
 };
 
 PbfReader.prototype._readNodes = function (pbfNodes, primitiveBlock) {
-    return [];
+    var self = this;
+
+    var nodes = [];
+
+    for (var i = 0; i < pbfNodes.length; i++) {
+        var node = new osm.Node();
+
+        node.id = parseInt(pbfNodes[i].id, 10);
+        node.latitude = parseFloat(pbfNodes[i].latitude) * primitiveBlock.granularity * 0.000000001;
+        node.longitude = parseFloat(pbfNodes[i].longitude) * primitiveBlock.granularity * 0.000000001;
+
+        if (pbfNodes[i].keys && pbfNodes[i].values) {
+            for (var j = 0; j < pbfNodes[i].keys.length; j++) {
+                var key = primitiveBlock.stringTable.values[pbfNodes[i].keys[j]];
+                var value = primitiveBlock.stringTable.values[pbfNodes[i].values[j]];
+
+                node.tags[key] = value;
+            }
+        }
+
+        nodes.push(node);
+    }
+
+    return nodes;
 };
 
 PbfReader.prototype._readDenseNodes = function (pbfDenseNodes, primitiveBlock) {
