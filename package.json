@@ -2,15 +2,19 @@
   "name": "node-osm-pbfreader",
   "version": "0.0.1",
   "description": "",
-  "main": "pbfreader.js",
+  "main": "lib/pbfreader.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jshint lib"
   },
-  "author": "",
+  "author": "Christian Schwarz",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/cschwarz/node-osm-pbfreader.git"
+  },
   "dependencies": {
-    "underscore": "~1.5.2",
+    "underscore": "^1.7.0",
     "node-osm": "https://github.com/cschwarz/node-osm/tarball/master",
-    "node-protobuf": "~1.0.10"
+    "node-protobuf": "^1.2.0"
   }
 }
