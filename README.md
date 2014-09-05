@@ -1,4 +1,4 @@
-node-osm-pbfreader
+node-osm-pbfreader [![Build Status](https://travis-ci.org/cschwarz/node-osm-pbfreader.svg?branch=master)](https://travis-ci.org/cschwarz/node-osm-pbfreader)
 ==================
 
 A node.js module for working with OpenStreetMap PBF files.
