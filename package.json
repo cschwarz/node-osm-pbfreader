@@ -16,5 +16,8 @@
     "underscore": "^1.7.0",
     "node-osm": "https://github.com/cschwarz/node-osm/tarball/master",
     "node-protobuf": "^1.2.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.5"
   }
 }
