@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/pbfreader.js",
   "scripts": {
-    "test": "jshint lib"
+    "test": "jshint lib && mocha"
   },
   "author": "Christian Schwarz",
   "license": "MIT",
@@ -13,9 +13,10 @@
     "url": "http://github.com/cschwarz/node-osm-pbfreader.git"
   },
   "dependencies": {
-    "underscore": "^1.7.0",
+    "async-eventemitter": "^0.2.2",
     "node-osm": "https://github.com/cschwarz/node-osm/tarball/master",
-    "node-protobuf": "^1.2.0"
+    "node-protobuf": "^1.2.0",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "jshint": "^2.5.5"
