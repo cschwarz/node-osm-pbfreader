@@ -19,6 +19,7 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "jshint": "^2.5.5"
+    "jshint": "^2.5.5",
+    "mocha": "^1.21.4"
   }
 }
